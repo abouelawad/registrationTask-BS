@@ -35,7 +35,7 @@
                         if(isRequired($name)){
                             $errors['name'] = 'required';
                         
-                        }elseif(!isString($name)){
+                        }elseif(!isString($email)){
                             $errors['name'] = 'should be string';
                             // echo $errors['email'];
                         }elseif(!isLessThan($name ,80)){
@@ -61,10 +61,12 @@
                             $errors['password']='length not more than 255';
                         }
                     
-                         // if validation passes 
+                         // if validation passes , check user has an account
                         $user = getOne('users',"email = '$email'");
-
-                        if (! empty($user)){
+                        
+                       
+                        // check user is valid
+                        if (! empty($user['email'])){
                             $passwordMatches = password_verify($password , $user['password']);
                         
                             if($passwordMatches)
@@ -78,16 +80,17 @@
                                 redirect("users/index.php");
                                 echo ' password matches';
                             }else{
-                                //redirect to admin login page 
-                                $errors['password'] = 'password is incorrect';
+                                $password_hashed = password_hash($password,PASSWORD_DEFAULT) ;
+                                // if validation passes 
+                                $user = insertData('users',['name'=>$name, 'email'=>$email, 'password'=>$password_hashed]);
+    
+                                        echo 'user added successfully';
+                                
                             }
                         }else{
-                            $password_hashed = password_hash($password,PASSWORD_DEFAULT) ;
-                            // if validation passes 
-                           $user = insert('users',"(name, email, password)
-                                    VALUES ('$name', '$email', '$password_hashed')");
-
-                                    echo 'user added successfully';
+                           //redirect to admin login page 
+                           $errors['password'] = 'password is incorrect';
+                           
                         }
                     }
                     ?>

@@ -54,7 +54,7 @@
                          // if validation passes 
                         $user = getOne('users',"email = '$email'");
                 
-                        if (! empty($user)){
+                        if (! empty($user['email'])){
                             $passwordMatches = password_verify($password , $user['password']);
                         
                             if($passwordMatches)
@@ -64,21 +64,25 @@
                                 setSession('id' , $user['id']);
                                 setSession('name' , $user['name']);
                                 setSession('email' , $user['email']);
+                                
                                 // redirect to admin/index.php 
                                 redirect("users/index.php");
                                 echo ' password matches';
                             }else{
+                                
                                 //redirect to admin login page 
                                 $errors['password'] = 'password is incorrect';
                             }
                         }else{
+                            
                             $errors['email'] = 'you are not a user';
+                            
                         }
                     }
                     ?>
 
                     <div>
-                        <form class="border p-5 my-3 " method="POST" action="../users/index.php">
+                        <form class="border p-5 my-3 " method="POST" action="">
                             <div class="form-group">
                                 <label for="email"  class="text-dark ">Email <?php getError('email');?></label>
                                 <input type="text" name="email" class="form-control" id="email">
