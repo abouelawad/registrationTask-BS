@@ -5,11 +5,17 @@ function setSession(string $key , $value)
 {
   $_SESSION[$key]=$value;
 }
+function setError(string $key , $value)
+{
+  $_SESSION['error'][$key]=$value;
+}
 
 function getSession(string $key)
 {
   return $_SESSION[$key];
 }
+
+
 
 function endSession(){
 

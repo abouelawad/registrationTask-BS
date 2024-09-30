@@ -20,75 +20,15 @@
             <div class="card ">
                 <div class="card-header">
                     <h3 class="text-center">login</h3>
-
-                    <?php 
-                    // Decomposing and preparation
-                    if(isset($_POST['submit']))
-                    {
-                        echo 'Sign up page';
-                        foreach ($_POST as $key => $value) {
-                            $$key = prepareInput($value);
-                        }
-                        // Validation
-                         // email : required | string : max:100
-                        
-                        if(isRequired($email)){
-                            $errors['email'] = 'required';
-                        
-                        }elseif(!isEmail($email)){
-                            $errors['email'] = 'should be Email';
-                            // echo $errors['email'];
-                        }elseif(!isLessThan($email ,70)){
-                            $errors['email']='length not more than 70';
-                        }
-                        
-                         //password : required , string , max:255
-                        if(isRequired($password)){
-                            $errors['password'] = 'required';
-                        }elseif(!isString($password)){
-                            $errors['password'] = 'should be string';
-                        }elseif(!isLessThan($password ,255)){
-                            $errors['password']='length not more than 255';
-                        }
-                    
-                         // if validation passes 
-                        $user = getOne('users',"email = '$email'");
-                
-                        if (! empty($user['email'])){
-                            $passwordMatches = password_verify($password , $user['password']);
-                        
-                            if($passwordMatches)
-                            {
-                                //store admin in session
-                            
-                                setSession('id' , $user['id']);
-                                setSession('name' , $user['name']);
-                                setSession('email' , $user['email']);
-                                
-                                // redirect to admin/index.php 
-                                redirect("users/index.php");
-                                echo ' password matches';
-                            }else{
-                                
-                                //redirect to admin login page 
-                                $errors['password'] = 'password is incorrect';
-                            }
-                        }else{
-                            
-                            $errors['email'] = 'you are not a user';
-                            
-                        }
-                    }
-                    ?>
-
+                    <?php if(isset($_SESSION['email'])) redirect('users/index.php')?>
                     <div>
-                        <form class="border p-5 my-3 " method="POST" action="">
+                        <form class="border p-5 my-3 " method="POST" action="../core/validatioLogin.php">
                             <div class="form-group">
-                                <label for="email"  class="text-dark ">Email <?php getError('email');?></label>
+                                <label for="email"  class="text-dark ">Email <?= getError('email'); unset($_SESSION['error']['email']);?></label>
                                 <input type="text" name="email" class="form-control" id="email">
                             </div>
                             <div class="form-group">
-                                <label for="password"  class="text-dark ">Password <?php getError('password');?></label>
+                                <label for="password"  class="text-dark ">Password <?= getError('password'); unset($_SESSION['error']['password']);?></label>
                                 <input type="password" name="password" class="form-control" id="password">
                             </div>
                             <button type="submit" name="submit" class="btn btn-primary btn-block">Login</button>
@@ -100,6 +40,7 @@
     </div>
 </div>
 
+?>
  <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"

@@ -8,8 +8,6 @@ $conn = mysqli_connect(DB_SERVERNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 // Check connection
 if (!$conn) {
   die("Connection failed: " . mysqli_connect_error());
-}else{
-  echo'Connection is done';
 }
 
 function getOne(string $table, string $where)
