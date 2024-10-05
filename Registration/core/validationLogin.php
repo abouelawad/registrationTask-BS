@@ -52,17 +52,20 @@ if( $_SERVER['REQUEST_METHOD']==='POST')
      // if validation passes 
     $user = getOne('users',"email = '$email'");
 
+    // NOTE -  check if signup attempt 
+
     if(empty($user) && isset($_POST['name'])){
         $password_hashed = password_hash($password,PASSWORD_DEFAULT) ;
         // if validation passes 
-       $user =  insertData('users',['name'=>$name, 'email'=>$email, 'password'=>$password_hashed]);
+        insertData('users',['name'=>$name, 'email'=>$email, 'password'=>$password_hashed]);
+        $user = getOne('users',"email = '$email'"); // FIXME - called twice in near lines
     }
-    
+   
     if (! empty($user)){
         $passwordMatches = password_verify($password , $user['password']);
         if($passwordMatches)
         {
-            //store admin in session
+            //store user in session
         
             setSession('id' , $user['id']);
             setSession('name' , $user['name']);
@@ -74,22 +77,15 @@ if( $_SERVER['REQUEST_METHOD']==='POST')
         }else{
             
             setError('password', 'password is incorrect');
-            
-            //redirect to admin login page 
         }
     }else{
-
 
         setError('email', 'you are not a user');
 
     }
 
     if(!empty($_SESSION['error'])){
-       redirect('auth/register.php');
-
-
-
-
+        redirect('auth/register.php');
     }
 }
 
