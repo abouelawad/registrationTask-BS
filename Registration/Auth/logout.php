@@ -6,4 +6,4 @@ require_once '../app.php';
 endSession();
 
   
-redirect();
+redirect('Auth/register.php');

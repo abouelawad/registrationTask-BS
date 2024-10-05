@@ -23,6 +23,10 @@ function isLessThan($input , $maxlength){
   $length = strlen($input);
   return ($length <= $maxlength);
 }
+function minLen($input , $minlen){
+  $length = strlen($input);
+  return ($length >= $minlen);
+}
 
 // function getError(string $key){
 //   global $errors;
